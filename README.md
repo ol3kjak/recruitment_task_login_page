@@ -1,1 +1,1 @@
-# recruitment_task_login_page
+# Recruitment task: login page
