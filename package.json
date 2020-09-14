@@ -6,10 +6,12 @@
     "@material-ui/core": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "formik": "^2.1.5",
     "react": "latest",
     "react-dom": "latest",
     "react-scripts": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "yup": "^0.29.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +35,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/yup": "^0.29.7"
   }
 }
