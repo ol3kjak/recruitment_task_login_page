@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import axios from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 
-import {CircularProgress, Paper, TextField, Container, Grid, Button, Typography} from "@material-ui/core";
-
-import {LoginData} from '../../App.models';
+import {Button, CircularProgress, Container, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import useStyles from '../../styles/styles';
 
-const Login = () => {
+import {UserResponse, FormValues} from '../../App.models';
+import {URL_GET_USER} from '../../utils/Utils';
+
+const Login: React.FC = () => {
     const classes = useStyles();
-    const url: string = 'https://5f5f88addf620f00163e5e11.mockapi.io/users';
     const [loginText, setLoginText] = useState<string>('');
     const [loading, isLoading] = useState<boolean>(false)
 
-    const formik = useFormik({
+    const formik = useFormik<FormValues>({
         initialValues: {
             email: "",
             password: ""
@@ -29,31 +29,31 @@ const Login = () => {
                     {message: "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number"})
                 .required('Required'),
         }),
-        onSubmit: values => {
+        onSubmit: (values: FormValues) => {
             return validateData(values)
         },
     });
 
-    const validateData = async (data: LoginData) => {
+    const validateData = async (data: FormValues): Promise<any> => {
         isLoading(true)
         setLoginText('');
-        await axios.get(url)
-            .then(response => {
+        await axios.get(URL_GET_USER)
+            .then((response: AxiosResponse<UserResponse>) => {
                 if (data.email === response.data?.email && data.password === response.data?.password) {
                     setLoginText("Logged in")
                 } else {
                     setLoginText("Wrong login data")
                 }
-                isLoading(false)
             })
-            .catch(err => {
+            .catch((err: AxiosError<any>) => {
                 console.log(err)
-                setLoginText('Api Error, try again')
+                setLoginText("Api Error, try again")
             })
+        isLoading(false)
     }
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Paper elevation={3} square={false} className={classes.root}>
                 <Grid
                     container
@@ -116,18 +116,24 @@ const Login = () => {
                 </Grid>
             </Paper>
             <Grid item>
-                <Paper elevation={3} square={false} className={classes.root}>
-                    <Grid container justify="center">
-                        {loading && <CircularProgress color="primary"/>}
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Typography variant="h3" component="h3" gutterBottom align="center">
-                            {loginText}
-                        </Typography>
-                    </Grid>
-                </Paper>
+                {loading && (
+                    <Paper elevation={3} square={false} className={classes.root}>
+                        <Grid container justify="center">
+                            <CircularProgress color="primary"/>
+                        </Grid>
+                    </Paper>
+                )}
+                {Boolean(loginText.length) && (
+                    <Paper elevation={3} square={false} className={classes.root}>
+                        <Grid item xs={12}>
+                            <Typography variant="h3" component="h3" gutterBottom align="center">
+                                {loginText}
+                            </Typography>
+                        </Grid>
+                    </Paper>
+                )}
             </Grid>
-        </React.Fragment>
+        </Fragment>
     );
 }
 export default Login;
