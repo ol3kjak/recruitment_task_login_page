@@ -7,7 +7,6 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 200,
             padding: '5vh 0 2vh 0',
             marginBottom: theme.spacing(3),
-            flexWrap: 'wrap',
         },
         formClass: {
             display: 'block',
@@ -15,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: '90%',
         },
         errorMessage: {
-            display: 'inline-block',
+            display: 'inline',
             height: 15,
             fontSize: 10,
             color: "red",

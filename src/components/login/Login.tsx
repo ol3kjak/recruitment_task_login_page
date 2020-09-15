@@ -7,8 +7,8 @@ import axios, {AxiosError, AxiosResponse} from 'axios';
 import {Button, CircularProgress, Container, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import useStyles from '../../styles/styles';
 
-import {UserResponse, FormValues} from '../../App.models';
-import {URL_GET_USER} from '../../utils/Utils';
+import {FormValues, UserResponse} from '../../App.models';
+import {URL_GET_USER} from '../../api/api';
 
 const Login: React.FC = () => {
     const classes = useStyles();
@@ -82,7 +82,7 @@ const Login: React.FC = () => {
                                 <span className={classes.errorMessage}>
                                 {formik.touched.email && formik.errors.email ? (
                                     formik.errors.email) : ''}
-                            </span>
+                                </span>
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
                                 <span className={classes.errorMessage}>
                                 {formik.touched.password && formik.errors.password ? (
                                     formik.errors.password) : null}
-                            </span>
+                                </span>
                             </Grid>
                             <Grid container justify="center">
                                 <Button
