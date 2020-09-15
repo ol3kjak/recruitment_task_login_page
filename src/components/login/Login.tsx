@@ -1,44 +1,13 @@
 import React, {useState} from 'react';
 
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import {Button, CircularProgress, Container, Grid, Paper, TextField, Typography} from "@material-ui/core";
-
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
 
-import {LoginData} from '../App.models';
+import {CircularProgress, Paper, TextField, Container, Grid, Button, Typography} from "@material-ui/core";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'block',
-            minWidth: 200,
-            padding: '5vh 0 2vh 0',
-            marginBottom: theme.spacing(3),
-            flexWrap: 'wrap',
-        },
-        formClass: {
-            display: 'block',
-            backgroundColor: 'white ',
-            minWidth: '90%',
-        },
-        errorMessage: {
-            display: 'inline-block',
-            height: 15,
-            fontSize: 10,
-            color: "red",
-        },
-        buttonAdditionalClass: {
-            marginTop: 50,
-        },
-        paperForLogInInformation: {
-            height: 100,
-            textAlign: 'center'
-        }
-    }),
-);
-
+import {LoginData} from '../../App.models';
+import useStyles from '../../styles/styles';
 
 const Login = () => {
     const classes = useStyles();
@@ -61,13 +30,14 @@ const Login = () => {
                 .required('Required'),
         }),
         onSubmit: values => {
-            validateData(values)
+            return validateData(values)
         },
     });
 
-    const validateData = (data: LoginData) => {
+    const validateData = async (data: LoginData) => {
         isLoading(true)
-        axios.get(url)
+        setLoginText('');
+        await axios.get(url)
             .then(response => {
                 if (data.email === response.data?.email && data.password === response.data?.password) {
                     setLoginText("Logged in")
@@ -76,9 +46,11 @@ const Login = () => {
                 }
                 isLoading(false)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err)
+                setLoginText('Api Error, try again')
+            })
     }
-
 
     return (
         <React.Fragment>
@@ -146,10 +118,10 @@ const Login = () => {
             <Grid item>
                 <Paper elevation={3} square={false} className={classes.root}>
                     <Grid container justify="center">
-                        {loading && <CircularProgress color="secondary"/>}
+                        {loading && <CircularProgress color="primary"/>}
                     </Grid>
                     <Grid item xs={12}>
-                        <Typography variant="h3" component="h2" gutterBottom align="center">
+                        <Typography variant="h3" component="h3" gutterBottom align="center">
                             {loginText}
                         </Typography>
                     </Grid>
